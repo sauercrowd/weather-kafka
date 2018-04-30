@@ -35,9 +35,10 @@ func main() {
 
 	waitTimeSeconds := int(float64(len(IDs))/float64(requestsPerMinute)*60 + 1)
 	for {
+		start := time.Now()
 		for _, id := range IDs {
 			log.Printf("ID [%d]", id)
-			wEntry, err := weather.GetWeather(parsedFlags.OWMApiKey, id)
+			wEntry, err := weather.GetWeather(parsedFlags.OWMApiKey, start, id)
 			if err != nil {
 				log.Println(err)
 				return
@@ -46,7 +47,11 @@ func main() {
 				log.Println("Could not add entry: ", err)
 			}
 		}
-		time.Sleep(time.Second * time.Duration(waitTimeSeconds))
+		elapsed := time.Since(start)
+		waitTime := time.Second*time.Duration(waitTimeSeconds) - elapsed
+		if waitTime > 0 {
+			time.Sleep(waitTime + 5) //5 seconds buffer
+		}
 	}
 
 }

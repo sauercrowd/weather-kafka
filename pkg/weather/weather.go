@@ -5,26 +5,30 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"time"
 )
 
 const urlTemplate = `http://api.openweathermap.org/data/2.5/weather?id=%d&appid=%s`
 
 type WeatherEntry struct {
-	Lat, Lon   float64
-	ID         int
-	Name       string
-	Temp       float64
-	TempMin    float64
-	TempMax    float64
-	Pressure   float64
-	Humidity   float64
-	Visibility float64
-	WindSpeed  float64
-	WindDeg    float64
-	Clouds     float64
+	IterationTime time.Time `json:"iterationTime"`
+	EntryTime     time.Time `json:"time"`
+	Lat           float64   `json:"lat"`
+	Lon           float64   `json:"lon"`
+	ID            int       `json:"id"`
+	Name          string    `json:"name"`
+	Temp          float64   `json:"temp"`
+	TempMin       float64   `json:"tempMin"`
+	TempMax       float64   `json:"tempMax"`
+	Pressure      float64   `json:"pressure"`
+	Humidity      float64   `json:"humidity"`
+	Visibility    float64   `json:"visibility"`
+	WindSpeed     float64   `json:"windSpeed"`
+	WindDeg       float64   `json:"windDeg"`
+	Clouds        float64   `json:"clouds"`
 }
 
-func GetWeather(apikey string, id int) (*WeatherEntry, error) {
+func GetWeather(apikey string, t time.Time, id int) (*WeatherEntry, error) {
 	url := fmt.Sprintf(urlTemplate, id, apikey)
 	resp, err := http.Get(url)
 	if err != nil {
@@ -40,19 +44,21 @@ func GetWeather(apikey string, id int) (*WeatherEntry, error) {
 		return nil, fmt.Errorf("Could not parse JSON: %v", err)
 	}
 	we := WeatherEntry{
-		Lat:        entry.Coord.Lat,
-		Lon:        entry.Coord.Lon,
-		ID:         entry.ID,
-		Name:       entry.Name,
-		Temp:       entry.Main.Temp,
-		TempMin:    entry.Main.TempMin,
-		TempMax:    entry.Main.TempMax,
-		Pressure:   entry.Main.Pressure,
-		Humidity:   entry.Main.Humidity,
-		Visibility: entry.Visibility,
-		WindSpeed:  entry.Wind.Speed,
-		WindDeg:    entry.Wind.Deg,
-		Clouds:     entry.Clouds.All,
+		IterationTime: t,
+		EntryTime:     time.Now(),
+		Lat:           entry.Coord.Lat,
+		Lon:           entry.Coord.Lon,
+		ID:            entry.ID,
+		Name:          entry.Name,
+		Temp:          entry.Main.Temp,
+		TempMin:       entry.Main.TempMin,
+		TempMax:       entry.Main.TempMax,
+		Pressure:      entry.Main.Pressure,
+		Humidity:      entry.Main.Humidity,
+		Visibility:    entry.Visibility,
+		WindSpeed:     entry.Wind.Speed,
+		WindDeg:       entry.Wind.Deg,
+		Clouds:        entry.Clouds.All,
 	}
 	return &we, nil
 }
