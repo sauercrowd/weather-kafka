@@ -16,6 +16,7 @@ type WeatherEntry struct {
 	Lat           float64   `json:"lat"`
 	Lon           float64   `json:"lon"`
 	ID            int       `json:"id"`
+	Desc          string    `json:"description"`
 	Name          string    `json:"name"`
 	Temp          float64   `json:"temp"`
 	TempMin       float64   `json:"tempMin"`
@@ -59,6 +60,9 @@ func GetWeather(apikey string, t time.Time, id int) (*WeatherEntry, error) {
 		WindSpeed:     entry.Wind.Speed,
 		WindDeg:       entry.Wind.Deg,
 		Clouds:        entry.Clouds.All,
+	}
+	if len(entry.Weather) > 0 {
+		we.Desc = entry.Weather[0].Description
 	}
 	return &we, nil
 }
