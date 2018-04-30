@@ -37,11 +37,12 @@ func main() {
 	for {
 		start := time.Now()
 		for _, id := range IDs {
-			log.Printf("ID [%d]", id)
 			wEntry, err := weather.GetWeather(parsedFlags.OWMApiKey, start, id)
 			if err != nil {
 				log.Println(err)
 				return
+			} else {
+				log.Println("Got [%s]", wEntry.Name)
 			}
 			if err := persistence.Add(&producer, wEntry); err != nil {
 				log.Println("Could not add entry: ", err)
@@ -50,7 +51,7 @@ func main() {
 		elapsed := time.Since(start)
 		waitTime := time.Second*time.Duration(waitTimeSeconds) - elapsed
 		if waitTime+5 > 0 {
-			log.Printf("wait for %d seconds", waitTime)
+			log.Printf("wait for %d seconds", waitTime/time.Second)
 			time.Sleep(waitTime + 5) //5 seconds buffer
 		} else {
 			log.Println("No need to wait any further")
