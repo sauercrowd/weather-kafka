@@ -2,6 +2,7 @@ package flags
 
 import (
 	"flag"
+	"log"
 )
 
 type ParsedFlags struct {
@@ -16,5 +17,12 @@ func Parse() ParsedFlags {
 	flag.StringVar(&p.StationsPath, "stations", "stations.txt", "path to stations file (one station id per line)")
 	flag.StringVar(&p.Kafka, "kafka", "localhost:9092", "kafka adresses, comma seperated")
 	flag.Parse()
+	validate(p)
 	return p
+}
+
+func validate(p ParsedFlags) {
+	if p.OWMApiKey == "" {
+		log.Fatal("Please provide a")
+	}
 }

@@ -49,8 +49,11 @@ func main() {
 		}
 		elapsed := time.Since(start)
 		waitTime := time.Second*time.Duration(waitTimeSeconds) - elapsed
-		if waitTime > 0 {
+		if waitTime+5 > 0 {
+			log.Printf("wait for %d seconds", waitTime)
 			time.Sleep(waitTime + 5) //5 seconds buffer
+		} else {
+			log.Println("No need to wait any further")
 		}
 	}
 
