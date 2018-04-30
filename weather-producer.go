@@ -42,7 +42,7 @@ func main() {
 				log.Println(err)
 				return
 			} else {
-				log.Println("Got [%s]", wEntry.Name)
+				log.Printf("Got [%s]", wEntry.Name)
 			}
 			if err := persistence.Add(&producer, wEntry); err != nil {
 				log.Println("Could not add entry: ", err)
