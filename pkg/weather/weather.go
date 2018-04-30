@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-const urlTemplate = `http://api.openweathermap.org/data/2.5/weather?id=%d&appid=%s`
+const urlTemplate = `http://api.openweathermap.org/data/2.5/weather?id=%d&appid=%s&units=metric`
 
 type WeatherEntry struct {
 	IterationTime time.Time `json:"iterationTime"`
